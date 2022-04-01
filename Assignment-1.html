@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment-1</title>
+    <style>
+        #outerdiv{
+            box-shadow: 8px 0px 12px grey;
+            border-radius: 10%;
+            position: absolute;
+            top: 20vh;
+            left: 10vw;
+            width: 70vw;
+            padding-top: 10vh;
+            padding-bottom: 10vh;
+            padding-left: 5vw;
+        }
+        .hds{
+            font-size: 2vw;
+            width: max-content;
+        }
+        .inps{
+            box-shadow: 5px 0px 8px orange;
+            background-color: darkorange;
+        }
+        #preview{
+            width: max-content;
+            float: right;
+            position: relative;
+            right: 5vw;
+        }
+        #uimage{
+            width:7vw;
+            height:15vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="outerdiv">
+        <div class="hds">Select your image</div>
+        <div id="preview">
+            <img src="" alt="user image" border="2" id="uimage">
+        </div>
+        <br>
+        <div>
+            <input type="file" name="user image" class="inps" accept="image/*" onchange="getimage(this)">
+        </div>
+        <br>
+        <div class="hds">Select your information file(json file)</div>
+        <br>
+        <div>
+            <input type="file" name="user info" class="inps" accept="application/json" onchange="getjson(this)">
+        </div>
+        <br>
+        <button class="inps" type="submit" onclick="sendall()">Submit</button>
+    </div>
+    <script>
+        let imagepath="";
+        let imagecontent="";
+        let jsoncontent="";
+        let content=`
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>User info</title>
+                <style>
+                    #caps{
+                        font-weight:bolder;
+                        font-size:2vw;
+                    }
+                    .tble{
+                        border-collapse:separate;
+                        border-spacing: 100px 50px;
+                        box-shadow:8px 0px 14px grey;
+                    }
+                    .props,.values{
+                        box-shadow:5px 0px 8px grey;
+                    }
+                    .props{
+                        font-weight:bolder;
+                        font-size:2vw;
+                    }
+                    </style>
+                    </head>
+                    <body>
+                    <table align='center' class='tble'> 
+                            <tbody> 
+                                <caption id='caps'>User info</caption>
+                                <tr class="block" > <td class="props" >`;
+        function getimage(x){
+            imagepath=URL.createObjectURL(x.files[0]);
+            document.getElementById("uimage").src=imagepath;
+            imagecontent="";
+            imagecontent=`<img src=${imagepath} width="100px" height="150px" border="2"/>
+                                    </td></tr>`;
+        }
+        function getjson(x){
+            let reader=new FileReader();
+            reader.onload=(event)=>{
+                let jsonf=JSON.parse(event.target.result);
+                jsoncontent="";
+                for(i in jsonf){
+                    jsoncontent+=`<tr class="blocks"> <td class="props">${i}</td> <td class="values" >${jsonf[i]}</td> </tr>`;
+                }
+                jsoncontent+="</tbody></table></body></html>";
+            }
+            reader.readAsText(x.files[0]);
+        }
+        function sendall(){
+            content+=(imagecontent+jsoncontent);
+            let newtab=window.open("","Dynamic Popup","scrollbars=yes,location=yes,resizeable=yes");
+            newtab.document.write(content);
+            
+        }
+    </script>
+</body>
+</html>
